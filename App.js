@@ -1,6 +1,7 @@
+// @refresh reset
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, YellowBox } from 'react-native';
 import 'firebase/firestore'
 import firebase from "firebase"
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -15,7 +16,9 @@ const firebaseConfig = {
   measurementId: "G-BMNBKB5WYJ"
 };
 
-const firebaseApp = firebase.initializeApp(firebaseConfig);
+if (firebase.apps.length === 0){
+  firebase.initializeApp(firebaseConfig);
+}
 {/* <!-- The core Firebase JS SDK is always required and must be listed first -->
 <script src="/__/firebase/8.1.1/firebase-app.js"></script>
 
@@ -25,6 +28,8 @@ const firebaseApp = firebase.initializeApp(firebaseConfig);
 
 <!-- Initialize Firebase -->
 <script src="/__/firebase/init.js"></script>*/}
+
+YellowBox.ignoreWarnings(['Setting a timer for a long period of time'])
 export default function App() {
   return (
     <View style={styles.container}>
