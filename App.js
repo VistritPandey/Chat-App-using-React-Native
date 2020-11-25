@@ -13,6 +13,10 @@ async function readUser() {
   }
 }
 
+async function handlePress() {
+  const _id = Math.random().toString(36).substring(7)
+}
+
 const firebaseConfig = {
   apiKey: "AIzaSyCBv1qefu2_zjcqH_Y1nptjd-7W1y8-sw0",
   authDomain: "vistrit-first-app.firebaseapp.com",
@@ -38,12 +42,14 @@ export default function App() {
     readUser()
   }, [])
 
-  if (!user){
-    return <View style={style.container}>
-            <TextInput style={styles.input} placeholder="Enter your name" value={name} onTextInput={setName}/>
-            <Button title="Enter the chat" />
-    </View>
-  }
+  if (!user) {
+    return (
+        <View style={styles.container}>
+            <TextInput style={styles.input} placeholder="Enter name" value={name} onChangeText={setName} />
+            <Button onPress={handlePress} title="Enter the chat" />
+        </View>
+    )
+}
   return (
     <View style={styles.container}>
       <Text>User is present</Text>
@@ -66,5 +72,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 15,
     borderColor: 'gray',
+    marginBottom: 20,
   }
 });
