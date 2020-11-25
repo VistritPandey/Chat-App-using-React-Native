@@ -1,6 +1,7 @@
 // @refresh reset
 import { StatusBar } from 'expo-status-bar';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { GiftedChat, giftedChat } from 'react-native-gifted-chat'
 import AsyncStorage from '@react-native-community/async-storage'
 import { StyleSheet, Text, View, YellowBox, Button, TextInput } from 'react-native';
 import 'firebase/firestore'
@@ -34,10 +35,8 @@ export default function App() {
   useEffect(() => {
     readUser()
     const unsubscribe = chatsRef.onSnapshot((querySnapshot) => {
-        const messagesFirestore = querySnapshot
-            .docChanges()
-            .filter(({ type }) => type === 'added')
-            .map(({ doc }) => {
+        const messagesFirestore = querySnapshot.docChanges().filter(({ type }) => type === 'added')
+        .map(({ doc }) => {
                 const message = doc.data()
                 return { ...message, createdAt: message.createdAt.toDate() }
             })
@@ -45,7 +44,14 @@ export default function App() {
         appendMessages(messagesFirestore)
     })
     return () => unsubscribe()
-}, [])
+}, [messages])
+
+const appendMessages = useCallback(
+  (messages) => {
+      setMessages((previousMessages) => GiftedChat.append(previousMessages, messages))
+  },
+  [messages]
+)
 
   async function readUser() {
     const user = await AsyncStorage.getItem('user')
@@ -61,6 +67,12 @@ export default function App() {
     setUser(user)
   }
 
+  async function handleSend(messages){
+    const writes = messages.map(m => chatsRef.add(m))
+    await Promise.all(writes)
+  }
+
+
   if (!user) {
     return (
         <View style={styles.container}>
@@ -70,10 +82,7 @@ export default function App() {
     )
 }
   return (
-    <View style={styles.container}>
-      <Text>User present</Text>
-      <StatusBar style="auto" />
-    </View>
+      <GiftedChat messages= {messages} user={user} onSend={handleSend} />
   );
 }
 
