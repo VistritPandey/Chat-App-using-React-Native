@@ -1,8 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import * as firebase from 'firebase'
 import 'firebase/firestore'
+import firebase from "firebase"
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyCBv1qefu2_zjcqH_Y1nptjd-7W1y8-sw0",
@@ -14,6 +14,8 @@ const firebaseConfig = {
   appId: "1:290356012423:web:9a49bcc76ba4fd0d715f22",
   measurementId: "G-BMNBKB5WYJ"
 };
+
+const firebaseApp = firebase.initializeApp(firebaseConfig);
 {/* <!-- The core Firebase JS SDK is always required and must be listed first -->
 <script src="/__/firebase/8.1.1/firebase-app.js"></script>
 
