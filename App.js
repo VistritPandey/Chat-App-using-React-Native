@@ -1,6 +1,6 @@
 // @refresh reset
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View, YellowBox } from 'react-native';
 import 'firebase/firestore'
 import firebase from "firebase"
