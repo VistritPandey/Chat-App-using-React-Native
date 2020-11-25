@@ -6,17 +6,6 @@ import { StyleSheet, Text, View, YellowBox, Button, TextInput } from 'react-nati
 import 'firebase/firestore'
 import firebase from "firebase"
 
-async function readUser() {
-  const user = await AsyncStorage.getItem('user')
-  if (user) {
-    setUser(JSON.parse(user))
-  }
-}
-
-async function handlePress() {
-  const _id = Math.random().toString(36).substring(7)
-}
-
 const firebaseConfig = {
   apiKey: "AIzaSyCBv1qefu2_zjcqH_Y1nptjd-7W1y8-sw0",
   authDomain: "vistrit-first-app.firebaseapp.com",
@@ -33,14 +22,44 @@ if (firebase.apps.length === 0){
 }
 
 YellowBox.ignoreWarnings(['Setting a timer for a long period of time'])
+
+const db = firebase.firestore()
+const chatsRef = db.collection('chats')
 export default function App() {
   const [user, setUser ] = useState(null)
   const [name, setName ] = useState('')
+  const [messages, setMessages] = useState([])
 
   
-  useEffect (() => {
+  useEffect(() => {
     readUser()
-  }, [])
+    const unsubscribe = chatsRef.onSnapshot((querySnapshot) => {
+        const messagesFirestore = querySnapshot
+            .docChanges()
+            .filter(({ type }) => type === 'added')
+            .map(({ doc }) => {
+                const message = doc.data()
+                return { ...message, createdAt: message.createdAt.toDate() }
+            })
+            .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+        appendMessages(messagesFirestore)
+    })
+    return () => unsubscribe()
+}, [])
+
+  async function readUser() {
+    const user = await AsyncStorage.getItem('user')
+    if (user) {
+      setUser(JSON.parse(user))
+    }
+  }
+  
+  async function handlePress() {
+    const _id = Math.random().toString(36).substring(7)
+    const user = { _id, name }
+    await AsyncStorage.setItem('user', JSON.stringify(user))
+    setUser(user)
+  }
 
   if (!user) {
     return (
@@ -52,7 +71,7 @@ export default function App() {
 }
   return (
     <View style={styles.container}>
-      <Text>User is present</Text>
+      <Text>User present</Text>
       <StatusBar style="auto" />
     </View>
   );
