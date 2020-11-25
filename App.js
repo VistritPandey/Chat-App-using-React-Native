@@ -1,9 +1,9 @@
 // @refresh reset
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect, useCallback } from 'react';
-import { GiftedChat, giftedChat } from 'react-native-gifted-chat'
+import { GiftedChat } from 'react-native-gifted-chat'
 import AsyncStorage from '@react-native-community/async-storage'
-import { StyleSheet, Text, View, YellowBox, Button, TextInput } from 'react-native';
+import { StyleSheet, View, YellowBox, Button, TextInput } from 'react-native';
 import 'firebase/firestore'
 import firebase from "firebase"
 
@@ -22,7 +22,7 @@ if (firebase.apps.length === 0){
   firebase.initializeApp(firebaseConfig);
 }
 
-YellowBox.ignoreWarnings(['Setting a timer for a long period of time'])
+
 
 const db = firebase.firestore()
 const chatsRef = db.collection('chats')
@@ -44,7 +44,7 @@ export default function App() {
         appendMessages(messagesFirestore)
     })
     return () => unsubscribe()
-}, [messages])
+}, [])
 
 const appendMessages = useCallback(
   (messages) => {
@@ -81,9 +81,7 @@ const appendMessages = useCallback(
         </View>
     )
 }
-  return (
-      <GiftedChat messages= {messages} user={user} onSend={handleSend} />
-  );
+  return <GiftedChat messages= {messages} user={user} onSend={handleSend} />
 }
 
 const styles = StyleSheet.create({
