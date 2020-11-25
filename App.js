@@ -1,10 +1,18 @@
 // @refresh reset
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, YellowBox } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage'
+import { StyleSheet, Text, View, YellowBox, Button, TextInput } from 'react-native';
 import 'firebase/firestore'
 import firebase from "firebase"
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+
+async function readUser() {
+  const user = await AsyncStorage.getItem('user')
+  if (user) {
+    setUser(JSON.parse(user))
+  }
+}
+
 const firebaseConfig = {
   apiKey: "AIzaSyCBv1qefu2_zjcqH_Y1nptjd-7W1y8-sw0",
   authDomain: "vistrit-first-app.firebaseapp.com",
@@ -19,25 +27,26 @@ const firebaseConfig = {
 if (firebase.apps.length === 0){
   firebase.initializeApp(firebaseConfig);
 }
-{/* <!-- The core Firebase JS SDK is always required and must be listed first -->
-<script src="/__/firebase/8.1.1/firebase-app.js"></script>
-
-<!-- TODO: Add SDKs for Firebase products that you want to use
-     https://firebase.google.com/docs/web/setup#available-libraries -->
-<script src="/__/firebase/8.1.1/firebase-analytics.js"></script>
-
-<!-- Initialize Firebase -->
-<script src="/__/firebase/init.js"></script>*/}
 
 YellowBox.ignoreWarnings(['Setting a timer for a long period of time'])
 export default function App() {
   const [user, setUser ] = useState(null)
+  const [name, setName ] = useState('')
+
+  
   useEffect (() => {
     readUser()
   }, [])
+
+  if (!user){
+    return <View style={style.container}>
+            <TextInput style={styles.input} placeholder="Enter your name" value={name} onTextInput={setName}/>
+            <Button title="Enter the chat" />
+    </View>
+  }
   return (
     <View style={styles.container}>
-      <Text>Hello</Text>
+      <Text>User is present</Text>
       <StatusBar style="auto" />
     </View>
   );
@@ -49,5 +58,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    padding: 30,
   },
+  input: {
+    height: 50,
+    width: '100%',
+    borderWidth: 1,
+    padding: 15,
+    borderColor: 'gray',
+  }
 });
