@@ -1,6 +1,6 @@
 // @refresh reset
 import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, YellowBox } from 'react-native';
 import 'firebase/firestore'
 import firebase from "firebase"
@@ -31,6 +31,10 @@ if (firebase.apps.length === 0){
 
 YellowBox.ignoreWarnings(['Setting a timer for a long period of time'])
 export default function App() {
+  const [user, setUser ] = useState(null)
+  useEffect (() => {
+    readUser()
+  }, [])
   return (
     <View style={styles.container}>
       <Text>Hello</Text>
