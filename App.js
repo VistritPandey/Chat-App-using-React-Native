@@ -8,14 +8,7 @@ import 'firebase/firestore'
 import firebase from "firebase"
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCBv1qefu2_zjcqH_Y1nptjd-7W1y8-sw0",
-  authDomain: "vistrit-first-app.firebaseapp.com",
-  databaseURL: "https://vistrit-first-app.firebaseio.com",
-  projectId: "vistrit-first-app",
-  storageBucket: "vistrit-first-app.appspot.com",
-  messagingSenderId: "290356012423",
-  appId: "1:290356012423:web:9a49bcc76ba4fd0d715f22",
-  measurementId: "G-BMNBKB5WYJ"
+    // use your own config file
 };
 
 if (firebase.apps.length === 0){
